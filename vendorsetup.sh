@@ -38,6 +38,9 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
   export OF_KEEP_DM_VERITY=1
   export OF_QUICK_BACKUP_LIST="/boot;/data;"
   export OF_SCREEN_H=2400
+  export OF_HIDE_NOTCH=1
+  export OF_STATUS_INDENT_LEFT=48
+  export OF_STATUS_INDENT_RIGHT=48
   export OF_FLASHLIGHT_ENABLE=0
   export OF_USE_MAGISKBOOT=1
   export OF_USE_MAGISKBOOT_FOR_ALL_PATCHES=1
