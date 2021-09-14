@@ -1,11 +1,6 @@
-on init
-    mkdir /mnt/vendor/persist
-    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
-
 on fs
-    install_keyring
-    setprop crypto.ready 1
     write /sys/class/power_supply/usb/otg_switch 1
+    start prepdecrypt
 
 service keystore_auth /system/bin/keystore_auth
     oneshot
@@ -48,7 +43,19 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     disabled
     seclabel u:r:recovery:s0
 
-on property:hwservicemanager.ready=true
+service prepdecrypt /system/bin/prepdecrypt.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+on property:crypto.ready=1 && property:ro.crypto.state=encrypted
+    mkdir /mnt/vendor/persist
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
+    install_keyring
+
+on property:crypto.ready=1 && property:hwservicemanager.ready=true
     start hal_cryptoeng_oppo
     start mobicore
     start keymaster-4-0
